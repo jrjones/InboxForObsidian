@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "D9FE3155-3DE5-4ECB-B4C4-277FDA5216F3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:InboxForObsidian.xcodeproj",
+      "identifier" : "0F1AFF142DA106DE00BE47A4",
+      "name" : "InboxForObsidian"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:InboxForObsidian.xcodeproj",
+        "identifier" : "0F1AFF252DA106E000BE47A4",
+        "name" : "InboxForObsidianTests"
+      }
+    }
+  ],
+  "version" : 1
+}

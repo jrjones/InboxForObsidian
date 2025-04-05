@@ -14,19 +14,11 @@
 			remoteGlobalIDString = 0F1AFF142DA106DE00BE47A4;
 			remoteInfo = InboxForObsidian;
 		};
-		0F1AFF312DA106E000BE47A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0F1AFF0D2DA106DE00BE47A4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0F1AFF142DA106DE00BE47A4;
-			remoteInfo = InboxForObsidian;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0F1AFF152DA106DE00BE47A4 /* InboxForObsidian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InboxForObsidian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F1AFF262DA106E000BE47A4 /* InboxForObsidianTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InboxForObsidianTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0F1AFF302DA106E000BE47A4 /* InboxForObsidianUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InboxForObsidianUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +28,13 @@
 				Info.plist,
 			);
 			target = 0F1AFF142DA106DE00BE47A4 /* InboxForObsidian */;
+		};
+		0FBE8C1E2DA134D500F9839C /* Exceptions for "InboxForObsidianTests" folder in "InboxForObsidianTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				InboxForObsidian.xctestplan,
+			);
+			target = 0F1AFF252DA106E000BE47A4 /* InboxForObsidianTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -50,12 +49,10 @@
 		};
 		0F1AFF292DA106E000BE47A4 /* InboxForObsidianTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0FBE8C1E2DA134D500F9839C /* Exceptions for "InboxForObsidianTests" folder in "InboxForObsidianTests" target */,
+			);
 			path = InboxForObsidianTests;
-			sourceTree = "<group>";
-		};
-		0F1AFF332DA106E000BE47A4 /* InboxForObsidianUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = InboxForObsidianUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,13 +72,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F1AFF2D2DA106E000BE47A4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,7 +80,6 @@
 			children = (
 				0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */,
 				0F1AFF292DA106E000BE47A4 /* InboxForObsidianTests */,
-				0F1AFF332DA106E000BE47A4 /* InboxForObsidianUITests */,
 				0F1AFF162DA106DE00BE47A4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,7 +89,6 @@
 			children = (
 				0F1AFF152DA106DE00BE47A4 /* InboxForObsidian.app */,
 				0F1AFF262DA106E000BE47A4 /* InboxForObsidianTests.xctest */,
-				0F1AFF302DA106E000BE47A4 /* InboxForObsidianUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -153,29 +141,6 @@
 			productReference = 0F1AFF262DA106E000BE47A4 /* InboxForObsidianTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0F1AFF2F2DA106E000BE47A4 /* InboxForObsidianUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0F1AFF412DA106E000BE47A4 /* Build configuration list for PBXNativeTarget "InboxForObsidianUITests" */;
-			buildPhases = (
-				0F1AFF2C2DA106E000BE47A4 /* Sources */,
-				0F1AFF2D2DA106E000BE47A4 /* Frameworks */,
-				0F1AFF2E2DA106E000BE47A4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0F1AFF322DA106E000BE47A4 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				0F1AFF332DA106E000BE47A4 /* InboxForObsidianUITests */,
-			);
-			name = InboxForObsidianUITests;
-			packageProductDependencies = (
-			);
-			productName = InboxForObsidianUITests;
-			productReference = 0F1AFF302DA106E000BE47A4 /* InboxForObsidianUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,10 +155,6 @@
 						CreatedOnToolsVersion = 16.3;
 					};
 					0F1AFF252DA106E000BE47A4 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 0F1AFF142DA106DE00BE47A4;
-					};
-					0F1AFF2F2DA106E000BE47A4 = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 0F1AFF142DA106DE00BE47A4;
 					};
@@ -215,7 +176,6 @@
 			targets = (
 				0F1AFF142DA106DE00BE47A4 /* InboxForObsidian */,
 				0F1AFF252DA106E000BE47A4 /* InboxForObsidianTests */,
-				0F1AFF2F2DA106E000BE47A4 /* InboxForObsidianUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,13 +189,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0F1AFF242DA106E000BE47A4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0F1AFF2E2DA106E000BE47A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,13 +212,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0F1AFF2C2DA106E000BE47A4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -273,11 +219,6 @@
 			isa = PBXTargetDependency;
 			target = 0F1AFF142DA106DE00BE47A4 /* InboxForObsidian */;
 			targetProxy = 0F1AFF272DA106E000BE47A4 /* PBXContainerItemProxy */;
-		};
-		0F1AFF322DA106E000BE47A4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0F1AFF142DA106DE00BE47A4 /* InboxForObsidian */;
-			targetProxy = 0F1AFF312DA106E000BE47A4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -492,10 +433,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidianTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InboxForObsidian.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InboxForObsidian";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
@@ -515,55 +456,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidianTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InboxForObsidian.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InboxForObsidian";
-				XROS_DEPLOYMENT_TARGET = 2.4;
-			};
-			name = Release;
-		};
-		0F1AFF422DA106E000BE47A4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D7AUHFL972;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidianUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = InboxForObsidian;
-				XROS_DEPLOYMENT_TARGET = 2.4;
-			};
-			name = Debug;
-		};
-		0F1AFF432DA106E000BE47A4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D7AUHFL972;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidianUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = InboxForObsidian;
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Release;
@@ -594,15 +491,6 @@
 			buildConfigurations = (
 				0F1AFF3F2DA106E000BE47A4 /* Debug */,
 				0F1AFF402DA106E000BE47A4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0F1AFF412DA106E000BE47A4 /* Build configuration list for PBXNativeTarget "InboxForObsidianUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0F1AFF422DA106E000BE47A4 /* Debug */,
-				0F1AFF432DA106E000BE47A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
