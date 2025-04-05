@@ -56,3 +56,10 @@ struct TaskStatus: Identifiable {
         }
     }
 }
+
+extension TaskStatus {
+    /// If symbol is nil, return a default symbol like "questionmark.square.dashed"
+    var fallbackSymbol: String {
+        symbol ?? "questionmark.square.dashed"
+    }
+}

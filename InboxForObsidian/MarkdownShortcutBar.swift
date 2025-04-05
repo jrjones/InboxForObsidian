@@ -25,22 +25,7 @@ struct MarkdownShortcutBar: View {
                     Button {
                         insertTaskMarker(status)
                     } label: {
-                        if let symbol = status.symbol {
-                            // If there's an SF Symbol, show that icon + display name
-                            Label(status.displayName, systemImage: symbol)
-                        } else {
-                            // Otherwise, display a fallback circle icon + display name
-                            HStack {
-                                ZStack {
-                                    Circle()
-                                        .stroke(Color.primary, lineWidth: 1)
-                                        .frame(width: 20, height: 20)
-                                    Text(status.id)
-                                        .font(.system(size: 11, weight: .bold))
-                                }
-                                Text(status.displayName)
-                            }
-                        }
+                        Label(status.displayName, systemImage: status.fallbackSymbol)
                     }
                 }
             } label: {
