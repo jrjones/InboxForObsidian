@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0F47B1872DA19E0200E82817 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0F1AFF272DA106E000BE47A4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,6 +23,7 @@
 /* Begin PBXFileReference section */
 		0F1AFF152DA106DE00BE47A4 /* InboxForObsidian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InboxForObsidian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F1AFF262DA106E000BE47A4 /* InboxForObsidianTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InboxForObsidianTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestPlan.xctestplan; path = InboxForObsidianTests/TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -78,6 +83,7 @@
 		0F1AFF0C2DA106DE00BE47A4 = {
 			isa = PBXGroup;
 			children = (
+				0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */,
 				0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */,
 				0F1AFF292DA106E000BE47A4 /* InboxForObsidianTests */,
 				0F1AFF162DA106DE00BE47A4 /* Products */,
@@ -185,6 +191,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F47B1872DA19E0200E82817 /* TestPlan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

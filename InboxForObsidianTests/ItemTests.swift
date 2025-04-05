@@ -2,7 +2,7 @@
 //  ItemTests.swift
 //  InboxForObsidian
 //
-//  Created by Joseph R. Jones on 4/5/25.
+//  Created by Joseph R. Jones and ChatGPT o1 on 4/5/25.
 //
 @testable import InboxForObsidian
 import SwiftData
@@ -99,5 +99,47 @@ struct InboxItemTests {
         #expect(components.hour == 0)
         #expect(components.minute == 0)
         #expect(components.second == 0)
+    }
+
+    @Suite
+    struct TaskStatusTests {
+        @Test func knownListIsNotEmptyAndContainsExpectedIdentifiers() {
+            #expect(!TaskStatus.known.isEmpty)
+            let knownIds = TaskStatus.known.map { $0.id }
+            #expect(knownIds.contains("!"))
+            #expect(knownIds.contains("?"))
+        }
+
+        @Test func forRawValueReturnsExpectedTaskStatusForKnownKeys() {
+            let alertStatus = TaskStatus.forRawValue("!")
+            #expect(alertStatus.id == "!")
+            #expect(alertStatus.symbol == "exclamationmark.triangle")
+            #expect(alertStatus.displayName == "Alert")
+
+            let importantStatus = TaskStatus.forRawValue("*")
+            #expect(importantStatus.id == "*")
+            #expect(importantStatus.symbol == nil)
+            #expect(importantStatus.displayName == "Important")
+        }
+
+        @Test func forRawValueHandlesUnknownKeysGracefully() {
+            let unknownStatus = TaskStatus.forRawValue("Z")
+            #expect(unknownStatus.id == "Z")
+            #expect(unknownStatus.symbol == nil)
+            #expect(unknownStatus.displayName == "Z")
+            #expect(unknownStatus.fallbackSymbol == "questionmark.square.dashed")
+        }
+
+        @Test func allKnownStatusesHaveNonEmptyDisplayNameAndFallbackSymbol() {
+            for status in TaskStatus.known {
+                #expect(!status.displayName.isEmpty)
+                #expect(!status.fallbackSymbol.isEmpty)
+                if let symbol = status.symbol {
+                    #expect(status.fallbackSymbol == symbol)
+                } else {
+                    #expect(status.fallbackSymbol == "questionmark.square.dashed")
+                }
+            }
+        }
     }
 }

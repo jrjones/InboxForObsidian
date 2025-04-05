@@ -33,6 +33,9 @@
             reference = "container:InboxForObsidian.xctestplan"
             default = "YES">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:InboxForObsidianTests/TestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
    </TestAction>
    <LaunchAction

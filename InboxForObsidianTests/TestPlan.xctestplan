@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "0C4C41B0-23CA-4828-8BD3-18DD94B29A24",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:InboxForObsidian.xcodeproj",
+        "identifier" : "0F1AFF252DA106E000BE47A4",
+        "name" : "InboxForObsidianTests"
+      }
+    }
+  ],
+  "version" : 1
+}
