@@ -2,20 +2,21 @@ import SwiftUI
 
 struct MarkdownShortcutBar: View {
     @Binding var draftText: String
+    // A closure the parent passes in so we can call it here
+    let onPushToObsidian: () -> Void
 
     var body: some View {
         HStack {
-            // Push to obsidian button first
+            // Push-to-Obsidian button
             Button {
-                // TODO: Connect with actual Obsidian sync logic
-                // e.g., openURL(URL(string: "obsidian://vault/..." )!)
+                onPushToObsidian()
             } label: {
                 Image(systemName: "arrow.triangle.2.circlepath")
             }
 
             Spacer()
 
-            // A basic “empty task” button
+            // Empty task button
             Button {
                 draftText += "- [ ] "
             } label: {
@@ -24,12 +25,12 @@ struct MarkdownShortcutBar: View {
 
             // A single known status (Alert) for demonstration
             Button {
-                insertTaskMarker(TaskStatus.forRawValue("!"))
+                insertTaskMarker(.forRawValue("!"))
             } label: {
                 Image(systemName: "exclamationmark.triangle")
             }
-            
-            // Dropdown menu for all known statuses
+
+            // Dropdown menu for other statuses
             Menu {
                 ForEach(TaskStatus.known) { status in
                     Button {

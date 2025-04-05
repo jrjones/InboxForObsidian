@@ -13,6 +13,7 @@ import AppKit
 struct ContentView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
 
     @State private var draftText = ""
     @State private var lastBackgroundDate: Date? = nil
@@ -39,7 +40,9 @@ struct ContentView: View {
                         Spacer()
 
                         // Existing shortcuts on the right
-                        MarkdownShortcutBar(draftText: $draftText)
+                        MarkdownShortcutBar(draftText: $draftText) {
+                            pushNotesToObsidian()
+                        }
                     }
                     .padding(.vertical, 16)
                     .padding(.horizontal, 16)
@@ -86,45 +89,35 @@ struct ContentView: View {
         draftText = ""
     }
 
-    private func pushNotesToObsidian() {
+    public func pushNotesToObsidian() {
         let unsyncedItems = inboxItems.filter { !$0.synced }
         let groupedByDate = Dictionary(grouping: unsyncedItems, by: \.targetDate)
 
         for (date, items) in groupedByDate {
             let combined = items.map(\.content).joined(separator: "\n\n")
             if let url = buildObsidianURL(for: date, content: combined) {
-                #if os(iOS)
-                // iOS: use UIApplication
-                UIApplication.shared.open(url) { success in
-                    if success {
+                openURL(url) { accepted in
+                    if accepted {
                         markItemsSynced(items)
                     } else {
-                        // Handle open-failure
+                        // Handle open-failure (e.g. Obsidian not installed, etc.)
                     }
                 }
-                #elseif os(macOS)
-                // macOS: use NSWorkspace
-                NSWorkspace.shared.open(url)
-                markItemsSynced(items)
-                #endif
             }
         }
     }
 
     private func buildObsidianURL(for date: Date, content: String) -> URL? {
-        let vaultName = Bundle.main.object(forInfoDictionaryKey: "ObsidianVaultName") as? String ?? "ObsidianSandbox"
+        let vaultName = Bundle.main.object(forInfoDictionaryKey: "ObsidianVaultName") as? String ?? "Obsidian Sandbox"
         let filePath = makeDailyFilePath(for: date)
-        let encodedContent = content.addingPercentEncoding(
-            withAllowedCharacters: .urlQueryAllowed
-        ) ?? ""
 
         var components = URLComponents(string: "obsidian://actions-uri/note/append")
         components?.queryItems = [
             URLQueryItem(name: "vault", value: vaultName),
             URLQueryItem(name: "file", value: filePath),
-            URLQueryItem(name: "content", value: encodedContent),
+            URLQueryItem(name: "content", value: "\n" + content),
             URLQueryItem(name: "create-if-not-found", value: "true"),
-            URLQueryItem(name: "silent", value: "true")
+            URLQueryItem(name: "silent", value: "false")
         ]
         return components?.url
     }

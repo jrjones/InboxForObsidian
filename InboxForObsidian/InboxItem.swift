@@ -1,27 +1,22 @@
-//
-//  MarkdownShortcutBar.swift
-//  InboxForObsidian
-//
-//  Created by Joseph R. Jones on 4/5/25.
-//
-
-import Foundation
 import SwiftData
+import Foundation
 
 @Model
-class InboxItem {
-    var content: String
-    var createdAt: Date
-    var targetDate: Date
-    var synced: Bool
+final class InboxItem {
+    var content: String = ""
+    var createdAt: Date = Date()
+    var targetDate: Date = Calendar.current.startOfDay(for: Date())
+    var synced: Bool = false
 
-    init(content: String,
-         createdAt: Date = Date(),
-         targetDate: Date = Date(),
-         synced: Bool = false) {
+    init(
+        content: String = "",
+        createdAt: Date = Date(),
+        targetDate: Date = Calendar.current.startOfDay(for: Date()),
+        synced: Bool = false
+    ) {
         self.content = content
         self.createdAt = createdAt
-        self.targetDate = Calendar.current.startOfDay(for: targetDate)
+        self.targetDate = targetDate
         self.synced = synced
     }
 }
