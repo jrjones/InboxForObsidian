@@ -27,34 +27,36 @@ struct ContentView: View {
             TextEditor(text: $draftText)
                 .focused($isTextEditorFocused)
                 .padding()
-                #if os(iOS)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        MarkdownShortcutBar(draftText: $draftText)
+                .safeAreaInset(edge: .bottom) {
+                    HStack {
+                        Spacer()
 
-                    }
-                }
-                #elseif os(macOS)
-                // On macOS, let the toolbar go monochrome
-                .toolbar {
-                    ToolbarItemGroup {
+                        // New note button (centered)
+                        Button(action: startNewDraft) {
+                            Image(systemName: "plus.circle")
+                        }
+
+                        Spacer()
+
+                        // Existing shortcuts on the right
                         MarkdownShortcutBar(draftText: $draftText)
                     }
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 16)
+                    .background(.thinMaterial)
                 }
-                #endif
 
-            HStack {
-                Spacer()
-                Button("Push to Obsidian") {
-                    pushNotesToObsidian()
-                }
-            }
             .padding()
         }
         .onAppear {
             isTextEditorFocused = true
         }
         .onChange(of: scenePhase, perform: handleScenePhaseChange)
+    }
+    
+    private func startNewDraft() {
+        finalizeDraftIfNeeded()  // This saves the current draft, if needed.
+        isTextEditorFocused = true
     }
 
     private func handleScenePhaseChange(_ newPhase: ScenePhase) {
@@ -110,7 +112,7 @@ struct ContentView: View {
     }
 
     private func buildObsidianURL(for date: Date, content: String) -> URL? {
-        let vaultName = "MainVault"
+        let vaultName = Bundle.main.object(forInfoDictionaryKey: "ObsidianVaultName") as? String ?? "ObsidianSandbox"
         let filePath = makeDailyFilePath(for: date)
         let encodedContent = content.addingPercentEncoding(
             withAllowedCharacters: .urlQueryAllowed

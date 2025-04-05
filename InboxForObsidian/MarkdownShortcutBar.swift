@@ -5,6 +5,16 @@ struct MarkdownShortcutBar: View {
 
     var body: some View {
         HStack {
+            // Push to obsidian button first
+            Button {
+                // TODO: Connect with actual Obsidian sync logic
+                // e.g., openURL(URL(string: "obsidian://vault/..." )!)
+            } label: {
+                Image(systemName: "arrow.triangle.2.circlepath")
+            }
+
+            Spacer()
+
             // A basic “empty task” button
             Button {
                 draftText += "- [ ] "
@@ -18,7 +28,7 @@ struct MarkdownShortcutBar: View {
             } label: {
                 Image(systemName: "exclamationmark.triangle")
             }
-
+            
             // Dropdown menu for all known statuses
             Menu {
                 ForEach(TaskStatus.known) { status in
