@@ -19,9 +19,15 @@ A minimalist iOS app for ultra-fast Markdown capture, tightly integrated with Ob
 
 # Next up prios
 
-    - Clean up Task Types, write some unit tests
-    - Data persistence
-    - Obsidian integration
+    - [x] Clean up Task Types, write some unit tests
+    - [x]Data persistence
+    - [x]Obsidian integration
+    - [x] rotation and keyboard show/hide handling
     - Advanced paste behavior (handle URLs, short text, long text)
     - Better iOS and macOS citizen (UI/UX: SwiftUI improvements, theming, and advanced features.)
     - AI features - low hanging fruit is selecting an appropriate icon when I don't have one. But there's a lot of ideas to explore. (This project is to some degree a platform for that exploration, but need some useful functionality first.)
+
+## Further out (maybe not this weekend)
+
+- voice ingest (WhisperKit? OpenAI's new agentic audio AIs?')
+- visionOS app
