@@ -1,14 +1,14 @@
-//
-//  MarkdownShortcutBar.swift
-//  InboxForObsidian
-//
-//  Created by Joseph R. Jones on 4/5/25.
-//
-
-
 import SwiftUI
 import SwiftData
 import Foundation  // for Date, etc.
+
+// Conditionally import UIKit for iOS, AppKit for macOS:
+#if canImport(UIKit)
+import UIKit
+#endif
+#if canImport(AppKit)
+import AppKit
+#endif
 
 struct ContentView: View {
     @Environment(\.modelContext) private var context
@@ -27,11 +27,21 @@ struct ContentView: View {
             TextEditor(text: $draftText)
                 .focused($isTextEditorFocused)
                 .padding()
+                #if os(iOS)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         MarkdownShortcutBar(draftText: $draftText)
+
                     }
                 }
+                #elseif os(macOS)
+                // On macOS, let the toolbar go monochrome
+                .toolbar {
+                    ToolbarItemGroup {
+                        MarkdownShortcutBar(draftText: $draftText)
+                    }
+                }
+                #endif
 
             HStack {
                 Spacer()
@@ -81,6 +91,8 @@ struct ContentView: View {
         for (date, items) in groupedByDate {
             let combined = items.map(\.content).joined(separator: "\n\n")
             if let url = buildObsidianURL(for: date, content: combined) {
+                #if os(iOS)
+                // iOS: use UIApplication
                 UIApplication.shared.open(url) { success in
                     if success {
                         markItemsSynced(items)
@@ -88,6 +100,11 @@ struct ContentView: View {
                         // Handle open-failure
                     }
                 }
+                #elseif os(macOS)
+                // macOS: use NSWorkspace
+                NSWorkspace.shared.open(url)
+                markItemsSynced(items)
+                #endif
             }
         }
     }
@@ -122,5 +139,17 @@ struct ContentView: View {
         formatter.dateFormat = "yyyy-MM-dd"
         let filename = formatter.string(from: date)
         return "Daily/\(filename)"
+    }
+
+    private func handlePaste() {
+        #if canImport(UIKit)
+        if let str = UIPasteboard.general.string {
+            draftText += str
+        }
+        #elseif os(macOS)
+        if let str = NSPasteboard.general.string(forType: .string) {
+            draftText += str
+        }
+        #endif
     }
 }
