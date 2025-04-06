@@ -13,7 +13,6 @@ A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdo
  5.  Smart Draft Retention: If you leave the app for under 30 seconds, your text remains. If longer, it saves that draft and clears for a fresh note.
 
 ## Screenshots
-![Screenshot showing a simple input screen in portrait location](./gfx/ifo-screenshot1.png)
 ![Screenshot showing a menu of entry types](./gfx/ifo-screenshot2.png)
 
 # Technical Notes
