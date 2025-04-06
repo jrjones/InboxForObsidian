@@ -133,7 +133,7 @@ struct ContentView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let filename = formatter.string(from: date)
-        return "Daily/\(filename)"
+        return "daily/\(filename)"
     }
 
     private func handlePaste() {
