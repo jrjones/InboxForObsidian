@@ -34,9 +34,11 @@ struct InboxForObsidianApp: App {
             }
         }
 
+        #if os(macOS)
         Window("About Inbox for Obsidian", id: "about") {
             AboutView()
         }
         .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
+        #endif
     }
 }

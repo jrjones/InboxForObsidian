@@ -54,7 +54,9 @@ struct ContentView: View {
         .onAppear {
             isTextEditorFocused = true
         }
-        .onChange(of: scenePhase, perform: handleScenePhaseChange)
+        .onChange(of: scenePhase) { _, newPhase in
+            handleScenePhaseChange(newPhase)
+        }
     }
     
     private func startNewDraft() {

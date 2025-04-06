@@ -27,10 +27,11 @@ struct AboutView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12) {
+                #if os(macOS)
                 Image(nsImage: NSApp.applicationIconImage)
-                    .resizable()
-                    .frame(width: 64, height: 64)
-                    .cornerRadius(12)
+                #elseif os(iOS)
+                Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                #endif
                 
                 Text(Bundle.main.appName)
                     .font(.title2)
