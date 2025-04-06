@@ -1,5 +1,5 @@
 # Inbox for Obsidian -- MVP Specification
-![gfx/ifo-icon.png|128]
+![gfx/ifo-icon.png|128](gfx/ifo-icon.png)
 ## Overview
 
 A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdown capture, tightly integrated with Obsidian.md. Opens instantly to a text editor for quick note-taking or task capture, using local SwiftData storage (synced with iCloud) and a manual push to Obsidian to prevent sync conflicts.
@@ -13,8 +13,8 @@ A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdo
  5.  Smart Draft Retention: If you leave the app for under 30 seconds, your text remains. If longer, it saves that draft and clears for a fresh note.
 
 ## Screenshots
-![./gfx/ifo-screenshot1.png|400]
-![./gfx/ifo-screenshot2.png|400]
+![./gfx/ifo-screenshot1.png|400](./gfx/ifo-screenshot1.png)
+![./gfx/ifo-screenshot2.png|400](./gfx/ifo-screenshot2.png)
 
 # Technical Notes
 
