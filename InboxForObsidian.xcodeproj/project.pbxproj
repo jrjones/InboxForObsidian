@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F0759A32DA2C9FF0040B9FD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0F0759A22DA2C9FF0040B9FD /* README.md */; };
 		0F47B1872DA19E0200E82817 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F0759A22DA2C9FF0040B9FD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0F1AFF152DA106DE00BE47A4 /* InboxForObsidian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InboxForObsidian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F1AFF262DA106E000BE47A4 /* InboxForObsidianTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InboxForObsidianTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestPlan.xctestplan; path = InboxForObsidianTests/TestPlan.xctestplan; sourceTree = "<group>"; };
@@ -44,6 +46,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0F0759A42DA2CA1C0040B9FD /* gfx */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = gfx;
+			sourceTree = "<group>";
+		};
 		0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -83,6 +90,8 @@
 		0F1AFF0C2DA106DE00BE47A4 = {
 			isa = PBXGroup;
 			children = (
+				0F0759A42DA2CA1C0040B9FD /* gfx */,
+				0F0759A22DA2C9FF0040B9FD /* README.md */,
 				0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */,
 				0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */,
 				0F1AFF292DA106E000BE47A4 /* InboxForObsidianTests */,
@@ -115,6 +124,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				0F0759A42DA2CA1C0040B9FD /* gfx */,
 				0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */,
 			);
 			name = InboxForObsidian;
@@ -191,6 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F0759A32DA2C9FF0040B9FD /* README.md in Resources */,
 				0F47B1872DA19E0200E82817 /* TestPlan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
