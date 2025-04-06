@@ -3,8 +3,8 @@ import SwiftData
 
 @main
 struct InboxForObsidianApp: App {
+    @Environment(\.openWindow) private var openWindow
     @State private var container: ModelContainer
-
     init() {
         do {
             // Identify your schema (the data models you want)
@@ -24,6 +24,19 @@ struct InboxForObsidianApp: App {
         WindowGroup {
             ContentView()
                 .modelContainer(container) // Provide the container to your views
+            
         }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Inbox for Obsidian") {
+                    openWindow(id: "about")
+                }
+            }
+        }
+
+        Window("About Inbox for Obsidian", id: "about") {
+            AboutView()
+        }
+        .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
     }
 }
