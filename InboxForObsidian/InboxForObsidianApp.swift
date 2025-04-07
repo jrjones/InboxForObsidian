@@ -11,7 +11,7 @@ struct InboxForObsidianApp: App {
             let schema = Schema([InboxItem.self])
             
             // Specify a CloudKit container
-            let config = ModelConfiguration("iCloud.obsidianInbox")
+            let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
             // Create a ModelContainer using that config
             container = try ModelContainer(for: schema, configurations: [config])
