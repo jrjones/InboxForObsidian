@@ -30,6 +30,7 @@ Package.resolved
 # Misc
 .DS_Store
 *.log
+*.xcbkptlist
 
 # Playground
 timeline.xctimeline
