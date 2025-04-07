@@ -22,7 +22,7 @@ struct InboxForObsidianApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(modelContext: container.mainContext)
                 .modelContainer(container) // Provide the container to your views
             
         }
