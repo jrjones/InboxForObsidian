@@ -75,7 +75,10 @@ struct MarkdownShortcutBar: View {
 
     private func statusButton(_ status: TaskStatus) -> some View {
         Button {
-            draftText += " - [\(status.id)] "
+            // Ensure task is on its own line: add newline if the last line isn't empty
+            let lastLine = draftText.components(separatedBy: "\n").last ?? ""
+            let prefix = lastLine.trimmingCharacters(in: .whitespaces).isEmpty ? "" : "\n"
+            draftText += "\(prefix) - [\(status.id)] "
         } label: {
             Image(systemName: status.symbol ?? status.fallbackSymbol)
                 .foregroundColor(tintColor(for: status))
