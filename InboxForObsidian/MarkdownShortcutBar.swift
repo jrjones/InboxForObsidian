@@ -16,7 +16,14 @@ struct MarkdownShortcutBar: View {
     /// All defined task statuses.
     private let statuses = TaskStatus.known
 
-    var body: some View {
+    #if os(visionOS)
+    var body: some View { visionBody }
+    #else
+    var body: some View { legacyBody }
+    #endif
+
+    @ViewBuilder
+    private var legacyBody: some View {
         Group {
             if horizontalSizeClass == .compact {
                 // COMPACT: two-row layout
@@ -26,7 +33,6 @@ struct MarkdownShortcutBar: View {
                 VStack(spacing: 8) {
                     HStack(spacing: 16) {
                         syncButton
-                        //emptyTaskButton
                         ForEach(topRow) { status in
                             statusButton(status)
                         }
@@ -41,7 +47,6 @@ struct MarkdownShortcutBar: View {
                 // REGULAR: single-row layout
                 HStack(spacing: 16) {
                     syncButton
-                    //emptyTaskButton
                     ForEach(statuses) { status in
                         statusButton(status)
                     }
@@ -50,28 +55,43 @@ struct MarkdownShortcutBar: View {
         }
         .buttonStyle(.borderless)
     }
-
+#if os(visionOS)
+    private var visionBody: some View {
+        VStack {} // placeholder for ornament attachment
+            .ornament(
+                visibility: .visible,
+                attachmentAnchor: .scene(.bottom),
+                contentAlignment: .center
+            ) {
+                HStack(spacing: 16) {
+                    if showsSyncButton {
+                        syncButton
+                    }
+                    // Only show first 12 shortcuts in visionOS ornament
+                    ForEach(statuses.prefix(12)) { status in
+                        statusButton(status)
+                    }
+                }
+                .padding(.vertical, 12)
+                .glassBackgroundEffect()
+            }
+    }
+    #endif
     // MARK: - Subviews
 
     private var syncButton: some View {
         Group {
             if showsSyncButton {
                 Button(action: onPushToObsidian) {
-                    Image(systemName: "arrow.triangle.2.circlepath")
+                    Label("Sync", systemImage: "arrow.triangle.2.circlepath")
+                        .labelStyle(.iconOnly)
                 }
+                .tint(.primary)
+                .help("Sync")
                 Spacer(minLength: 0)
             }
         }
     }
-
-//    private var emptyTaskButton: some View {
-//        Button {
-//            draftText += " - [ ] "
-//        } label: {
-//            Image(systemName: "square")
-//        }
-//        .help("Empty task")
-//    }
 
     private func statusButton(_ status: TaskStatus) -> some View {
         Button {
@@ -80,9 +100,11 @@ struct MarkdownShortcutBar: View {
             let prefix = lastLine.trimmingCharacters(in: .whitespaces).isEmpty ? "" : "\n"
             draftText += "\(prefix) - [\(status.id)] "
         } label: {
-            Image(systemName: status.symbol ?? status.fallbackSymbol)
-                .foregroundColor(tintColor(for: status))
+            Label(status.displayName, systemImage: status.symbol ?? status.fallbackSymbol)
+                .labelStyle(.iconOnly)
+                .symbolRenderingMode(.hierarchical)
         }
+        .tint(tintColor(for: status))
         .help(status.displayName)
     }
 
@@ -90,25 +112,27 @@ struct MarkdownShortcutBar: View {
 
     private func tintColor(for status: TaskStatus) -> Color {
         switch status.id {
+        case " ": return .gray
         case "!": return .red
         case "?": return .yellow
-        case "/": return .green
+        case "/": return .gray
+        case "x": return .green
+        case "\"": return .orange
         case ">": return .gray
         case "<": return .gray
         case "*": return .yellow
         case "i": return .blue
-        case "\"": return .pink
-        case "p": return .green
-        case "c": return .red
-        case "u": return .green
-        case "d": return .red
-        case "f": return .orange
-        case "k": return .yellow
-        case "b": return .red
-        case "l": return .red
+        case "w": return .purple
         case "I": return .yellow
         case "S": return .green
-        case "w": return .purple
+        case "p": return .green
+        case "c": return .red
+        case "f": return .orange
+        case "b": return .red
+        case "l": return .red
+        case "u": return .green
+        case "d": return .red
+        case "k": return .yellow
         default:  return .primary
         }
     }

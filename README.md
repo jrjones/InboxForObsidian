@@ -35,6 +35,7 @@ Opens *instantly* to a text editor for quick note-taking or task capture, using 
  - [x] SFSymbol icons (rendered and cached) for markdown shortcut bar
  - [x] Markdown preview with SFSymbol replacement
  - [ ] Voice ingest (WhisperKit)
+ - [ ] "Server mode" menubar app on Mac makes syncs automatic, checks if Obsidian is running locally.
  - [ ] Better iOS and macOS citizen (UI/UX: SwiftUI improvements, theming, and advanced features.)
   
 ## Markdown Preview with MarkdownUI

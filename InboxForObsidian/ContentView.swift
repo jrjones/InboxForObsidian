@@ -11,81 +11,89 @@ struct ContentView: View {
     @StateObject private var viewModel: InboxViewModel
     @State private var isPreview: Bool = false
 
+    #if os(visionOS)
+    private enum ActionTab: Hashable { case main, newEntry, togglePreview, sync }
+    @State private var selectedTab: ActionTab = .main
+    #endif
+
     /// Inject the ModelContext from the app for SwiftData operations.
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
     }
 
-    var body: some View {
+    // Shared editor / preview stack
+    @ViewBuilder
+    private var editorArea: some View {
         VStack {
-            // Editor / Preview toggle
             Group {
-            if isPreview {
-                // Render Markdown with task previews using TaskMarkdownPreview
-                ScrollView {
-                    TaskMarkdownPreview(markdown: viewModel.draftText)
-                        .padding(.horizontal, 10)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .scrollContentBackground(.hidden)
-                .background(Color.clear)
-            } else {
-#if canImport(UIKit)
+                if isPreview {
+                    ScrollView {
+                        TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.horizontal, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
+                } else {
+    #if canImport(UIKit)
                     PasteHandlingTextEditor(text: $viewModel.draftText)
-#else
+    #else
                     PasteHandlingTextEditor(text: $viewModel.draftText,
                                              isFocused: $isTextEditorFocused)
-#endif
+    #endif
                 }
             }
+        #if os(visionOS)
+            .padding(.horizontal, 48)
+            .padding(.vertical, 24)
+        #endif
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
 
-            // Shortcut bar inset
-            .safeAreaInset(edge: .bottom) {
-                HStack {
-                    Spacer()
-                    MarkdownShortcutBar(draftText: $viewModel.draftText, showsSyncButton: false) {
-                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
-                    }
-                    Spacer()
-                }
-                .padding(.vertical, 16)
-                .background(.thinMaterial)
-            }
-        }
+    var body: some View {
 #if os(visionOS)
-        // Vision‑only ornament toolbar
-        .ornament(
-            attachmentAnchor: .scene(.leading),
-            contentAlignment: .leading
-        ) {
-            VStack(alignment: .leading, spacing: 12) {
-                Button {
-                    viewModel.startNewDraft()
-                    isTextEditorFocused = true
-                } label: {
-                    Image(systemName: "plus.circle")
-                }
-                Button {
-                    isPreview.toggle()
-                } label: {
-                    Image(systemName: isPreview ? "pencil" : "eye")
-                }
-                Button {
-                    Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
-                } label: {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                }
-            }
-            .padding()
-            .background(.thinMaterial)
-            .cornerRadius(20)
-            .offset(x: -30)
+        TabView(selection: $selectedTab) {
+            // New Entry tab
+            editorArea
+                .tabItem { Label("New", systemImage: "plus.circle") }
+                .tag(ActionTab.newEntry)
+
+            // Toggle Preview / Edit tab (label & icon depend on state)
+            editorArea
+                .tabItem { Label(isPreview ? "Edit" : "Preview",
+                                 systemImage: isPreview ? "pencil" : "eye") }
+                .tag(ActionTab.togglePreview)
+
+            // Sync tab
+            editorArea
+                .tabItem { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
+                .tag(ActionTab.sync)
         }
-#endif
-        // Standard toolbar for non‑visionOS
+        .onChange(of: selectedTab) { tab in
+            switch tab {
+            case .newEntry:
+                viewModel.startNewDraft()
+                isTextEditorFocused = true
+            case .togglePreview:
+                isPreview.toggle()
+            case .sync:
+                Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+            default:
+                break
+            }
+            selectedTab = .main        // collapse labels after the action
+        }
+        .onAppear {
+            isTextEditorFocused = true
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            viewModel.handleScenePhaseChange(newPhase)
+        }
+#else
+        // ----- non‑visionOS path stays exactly as it was -----
+        editorArea
         .toolbar {
-#if !os(visionOS)
             ToolbarItem {
                 HStack {
                     Button {
@@ -94,29 +102,126 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "plus.circle")
                     }
+                    .help("New Entry")
                     Button {
                         isPreview.toggle()
                     } label: {
                         Image(systemName: isPreview ? "pencil" : "eye")
                     }
+                    .help(isPreview ? Text("Edit") : Text("Preview"))
                     Button {
                         Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
                     } label: {
                         Image(systemName: "arrow.triangle.2.circlepath")
                     }
+                    .help("Sync")
                 }
             }
-#endif
         }
         .onAppear {
-            // Autofocus the editor on launch
             isTextEditorFocused = true
         }
-        .onChange(of: scenePhase) { oldPhase, newPhase in
+        .onChange(of: scenePhase) { _, newPhase in
             viewModel.handleScenePhaseChange(newPhase)
         }
+#endif
+        // Shortcut bar inset (non-visionOS)
+#if !os(visionOS)
+        .safeAreaInset(edge: .bottom) {
+            HStack {
+                Spacer()
+                MarkdownShortcutBar(draftText: $viewModel.draftText, showsSyncButton: false) {
+                    Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                }
+                Spacer()
+            }
+            .padding(.vertical, 16)
+            .background(.thinMaterial)
+        }
+#endif
+        // Shortcut bar ornament (visionOS)
+#if os(visionOS)
+        MarkdownShortcutBar(
+            draftText: $viewModel.draftText,
+            showsSyncButton: false
+        ) {
+            Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+        }
+#endif
     }
 }
+
+// MARK: - VisionOS expanding‑label button style
+/// A button style that shows only the SF Symbol by default and
+/// widens to reveal the text when the user hovers / gazes at it.
+/// Collapsed width is fixed at 44 pt so all buttons align.
+struct ExpandingIconOnlyButtonStyle: ButtonStyle {
+    private struct HoverView: View {
+        @State private var isHovered = false
+        let configuration: Configuration
+
+        var body: some View {
+            Group {
+                if isHovered {
+                    configuration.label
+                        .labelStyle(.titleAndIcon)
+                } else {
+                    configuration.label
+                        .labelStyle(.iconOnly)
+                }
+            }
+            .frame(minWidth: 44)                         // equal collapsed width
+            .animation(.easeInOut(duration: 0.15), value: isHovered)
+            .onHover { hover in
+                isHovered = hover
+            }
+        }
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        HoverView(configuration: configuration)
+    }
+}
+
+/*
+#if os(visionOS)
+/// Toolbar button that shows only its SF Symbol by default
+/// and reveals the text label when hovered / gazed at.
+/// Width is fixed so all buttons stay aligned.
+struct ToolbarIconButton: View {
+    let title: String
+    let systemImage: String
+    let action: () -> Void
+    var help: String? = nil
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .frame(width: 44, height: 44)                    // equal width/height
+                .contentShape(Rectangle())                      // full‑width hit area
+                .overlay(alignment: .leading) {
+                    if isHovered {
+                        Text(title)
+                            .font(.caption)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(.thinMaterial, in: Capsule())
+                            .offset(x: 50)                       // reveal to the right
+                            .transition(.move(edge: .trailing)
+                                        .combined(with: .opacity))
+                    }
+                }
+        }
+        .buttonStyle(.plain)                                    // keep system tint
+        .onHover { isHovered = $0 }                             // track gaze/hover
+        .help(help ?? title)
+        .animation(.easeInOut(duration: 0.15), value: isHovered)
+    }
+}
+#endif
+*/
 
 // MARK: - MarkdownUI Minimal Obsidian Theme
 extension Theme {
