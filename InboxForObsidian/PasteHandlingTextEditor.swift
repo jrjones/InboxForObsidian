@@ -15,8 +15,11 @@ import AppKit
 
 #if canImport(UIKit)
 /// A UIViewRepresentable text editor that intercepts paste actions for smart behavior.
+/// A UIViewRepresentable text editor that intercepts paste actions for smart behavior.
 struct PasteHandlingTextEditor: UIViewRepresentable {
     @Binding var text: String
+    /// Optional focus binding for controlling first responder state.
+    var isFocused: FocusState<Bool>.Binding? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text)
@@ -41,6 +44,14 @@ struct PasteHandlingTextEditor: UIViewRepresentable {
         // Sync text
         if uiView.text != text {
             uiView.text = text
+        }
+        // Sync focus if binding provided
+        if let isFocusedBinding = isFocused {
+            if isFocusedBinding.wrappedValue && !uiView.isFirstResponder {
+                uiView.becomeFirstResponder()
+            } else if !isFocusedBinding.wrappedValue && uiView.isFirstResponder {
+                uiView.resignFirstResponder()
+            }
         }
     }
 
@@ -127,7 +138,8 @@ fileprivate class PasteScrollView: NSScrollView {
 /// An NSViewRepresentable text editor that intercepts paste actions for smart behavior.
 struct PasteHandlingTextEditor: NSViewRepresentable {
     @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
+    /// Optional focus binding for controlling first responder state.
+    var isFocused: FocusState<Bool>.Binding? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text)
@@ -169,7 +181,7 @@ struct PasteHandlingTextEditor: NSViewRepresentable {
             tv.string = text
         }
         // Sync focus: defer until the view is attached to a window
-        if isFocused.wrappedValue {
+        if let isFocusedBinding = isFocused, isFocusedBinding.wrappedValue {
             DispatchQueue.main.async {
                 tv.window?.makeFirstResponder(tv)
             }

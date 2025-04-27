@@ -1,5 +1,5 @@
 import SwiftUI
-
+import MarkdownUI
 /// A simple manual Markdown renderer for block-level elements.
 /// Supports headings (#, ##, ###), bullet lists (- ), and paragraphs.
 struct ManualMarkdownPreview: View {
