@@ -22,9 +22,7 @@ struct ContentView: View {
             Group {
                 if isPreview {
                     ScrollView {
-                        Markdown(viewModel.draftText)
-                            .markdownTheme(.gitHub)
-                            .textSelection(.enabled)
+                        TaskMarkdownPreview(markdown: viewModel.draftText)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .scrollContentBackground(.hidden)
