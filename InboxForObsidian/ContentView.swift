@@ -24,12 +24,20 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            // Main text editor for drafting notes.
-            TextEditor(text: $viewModel.draftText)
-                .focused($isTextEditorFocused)
-                .padding()
-                .safeAreaInset(edge: .bottom) {
-                    // Bottom toolbar with New Note button and Markdown shortcuts.
+            // Main text editor for drafting notes with smart paste handling.
+            // Main text editor for drafting notes with smart paste handling.
+            Group {
+                #if canImport(UIKit)
+                PasteHandlingTextEditor(text: $viewModel.draftText)
+                #else
+                PasteHandlingTextEditor(text: $viewModel.draftText,
+                                         isFocused: $isTextEditorFocused)
+                #endif
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+            .safeAreaInset(edge: .bottom) {
+                // Bottom toolbar with New Note button and Markdown shortcuts.
                     HStack {
                         Spacer()
                         Button(action: {
