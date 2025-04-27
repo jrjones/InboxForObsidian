@@ -14,8 +14,8 @@ struct ContentView: View {
     @StateObject private var viewModel: InboxViewModel
     @State private var isPreview = false
 
-    private enum ActionTab: Hashable { case newEntry, togglePreview, sync }
-    @State private var selectedTab: ActionTab = .newEntry
+    private enum ActionTab: Hashable { case newEntry, edit, preview, sync }
+    @State private var selectedTab: ActionTab = .edit
 
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
@@ -53,29 +53,40 @@ struct ContentView: View {
                 .tabItem { Label("New", systemImage: "plus.circle") }
                 .tag(ActionTab.newEntry)
 
-            // Toggle Preview / Edit tab
+            // Edit tab
             editorArea
-                .tabItem { Label(isPreview ? "Edit" : "Preview",
-                                 systemImage: isPreview ? "pencil" : "eye") }
-                .tag(ActionTab.togglePreview)
+                .tabItem { Label("Edit", systemImage: "pencil") }
+                .tag(ActionTab.edit)
+
+            // Preview tab
+            editorArea
+                .tabItem { Label("Preview", systemImage: "eye") }
+                .tag(ActionTab.preview)
 
             // Sync tab
             editorArea
                 .tabItem { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
                 .tag(ActionTab.sync)
         }
-        .task(id: selectedTab) {
-            switch selectedTab {
-            case .newEntry:
-                viewModel.startNewDraft()
-                try? await Task.sleep(nanoseconds: 300_000_000) // let layout settle
-                await MainActor.run { isTextEditorFocused = true }
+        .onChange(of: selectedTab) { newTab in
+            // defer work to next run‑loop tick to avoid view‑update mutations
+            DispatchQueue.main.async {
+                switch newTab {
+                case .newEntry:
+                    viewModel.startNewDraft()
+                    isTextEditorFocused = true
 
-            case .togglePreview:
-                await MainActor.run { isPreview.toggle() }
+                case .edit:
+                    isPreview = false
+                    isTextEditorFocused = true
 
-            case .sync:
-                await viewModel.pushNotesToObsidian(openURL: openURL)
+                case .preview:
+                    isPreview = true
+                    isTextEditorFocused = false
+
+                case .sync:
+                    Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                }
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
