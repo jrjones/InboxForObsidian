@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0F0759A32DA2C9FF0040B9FD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0F0759A22DA2C9FF0040B9FD /* README.md */; };
 		0F47B1872DA19E0200E82817 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */; };
+		0F67F4D82DBDD81B003187F2 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0F67F4D72DBDD81B003187F2 /* MarkdownUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F67F4D82DBDD81B003187F2 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +131,7 @@
 			);
 			name = InboxForObsidian;
 			packageProductDependencies = (
+				0F67F4D72DBDD81B003187F2 /* MarkdownUI */,
 			);
 			productName = InboxForObsidian;
 			productReference = 0F1AFF152DA106DE00BE47A4 /* InboxForObsidian.app */;
@@ -185,6 +188,9 @@
 			);
 			mainGroup = 0F1AFF0C2DA106DE00BE47A4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0F67F4D62DBDD487003187F2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F1AFF162DA106DE00BE47A4 /* Products */;
 			projectDirPath = "";
@@ -266,10 +272,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -308,10 +314,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = org.jrj.InboxForObsidian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -518,6 +524,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0F67F4D62DBDD487003187F2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0F67F4D72DBDD81B003187F2 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0F67F4D62DBDD487003187F2 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0F1AFF0D2DA106DE00BE47A4 /* Project object */;
 }

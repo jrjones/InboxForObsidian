@@ -22,9 +22,15 @@ struct InboxForObsidianApp: App {
 
     var body: some Scene {
         WindowGroup {
+            #if os(visionOS)
             ContentView(modelContext: container.mainContext)
                 .modelContainer(container) // Provide the container to your views
-            
+            #else
+            NavigationStack {
+                ContentView(modelContext: container.mainContext)
+            }
+            .modelContainer(container)
+            #endif
         }
         .commands {
             CommandGroup(replacing: .appInfo) {

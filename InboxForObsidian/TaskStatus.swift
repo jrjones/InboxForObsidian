@@ -27,23 +27,25 @@ struct TaskStatus: Identifiable {
     
     /// A static list of known statuses with chosen characters & (optionally) SF Symbols.
     static let known: [TaskStatus] = [
-        TaskStatus(rawValue: "!",  symbol: "exclamationmark.triangle", displayName: "Alert"),
-        TaskStatus(rawValue: "?",  symbol: "questionmark.circle",      displayName: "Question"),
-        TaskStatus(rawValue: "/",  symbol: "circle.lefthalf.filled",   displayName: "Partially Done"),
-        TaskStatus(rawValue: "b",  symbol: "bookmark.fill",            displayName: "Bookmark"),
-        TaskStatus(rawValue: "i",  symbol: "info.circle",              displayName: "Info"),
-        TaskStatus(rawValue: "I",  symbol: "lightbulb.fill",           displayName: "Idea"),
-        TaskStatus(rawValue: "<",  symbol: "calendar",                 displayName: "Event"),
-        
-        // Some with no SF Symbols, fallback to just the character:
-        TaskStatus(rawValue: "*",  symbol: nil,                        displayName: "Important"),
-        TaskStatus(rawValue: "\"", symbol: nil,                        displayName: "Quote"),
-        TaskStatus(rawValue: "p",  symbol: nil,                        displayName: "Thumbs Up"),
-        TaskStatus(rawValue: "c",  symbol: nil,                        displayName: "Thumbs Down"),
-        TaskStatus(rawValue: "u",  symbol: nil,                        displayName: "Chart Up"),
-        TaskStatus(rawValue: "d",  symbol: nil,                        displayName: "Chart Down"),
-        TaskStatus(rawValue: "S",  symbol: nil,                        displayName: "Dollar"),
-        TaskStatus(rawValue: "w",  symbol: nil,                        displayName: "Win"),
+        TaskStatus(rawValue: "!",  symbol: "exclamationmark.triangle",    displayName: "Alert"),
+        TaskStatus(rawValue: "?",  symbol: "questionmark.circle",         displayName: "Question"),
+        TaskStatus(rawValue: "/",  symbol: "circle.lefthalf.filled",      displayName: "Partially Done"),
+        TaskStatus(rawValue: ">",  symbol: "arrow.right",                 displayName: "Moved"),
+        TaskStatus(rawValue: "<",  symbol: "arrow.left",                  displayName: "Event"),
+        TaskStatus(rawValue: "*",  symbol: "star.fill",                   displayName: "Important"),
+        TaskStatus(rawValue: "i",  symbol: "info.circle",                 displayName: "Information"),
+        TaskStatus(rawValue: "\"", symbol: "text.quote",                  displayName: "Quotation"),
+        TaskStatus(rawValue: "p",  symbol: "hand.thumbsup.fill",          displayName: "Thumbs Up"),
+        TaskStatus(rawValue: "c",  symbol: "hand.thumbsdown.fill",        displayName: "Thumbs Down"),
+        TaskStatus(rawValue: "u",  symbol: "arrow.up",                    displayName: "Up trend"),
+        TaskStatus(rawValue: "d",  symbol: "arrow.down",                  displayName: "Down trend"),
+        TaskStatus(rawValue: "f",  symbol: "flame.fill",                  displayName: "Fire"),
+        TaskStatus(rawValue: "k",  symbol: "key.fill",                    displayName: "Key"),
+        TaskStatus(rawValue: "b",  symbol: "bookmark.fill",               displayName: "Bookmark"),
+        TaskStatus(rawValue: "l",  symbol: "mappin.and.ellipse",          displayName: "Location"),
+        TaskStatus(rawValue: "I",  symbol: "lightbulb.fill",              displayName: "Idea"),
+        TaskStatus(rawValue: "S",  symbol: "dollarsign.circle.fill",      displayName: "Savings/Spend"),
+        TaskStatus(rawValue: "w",  symbol: "trophy.fill",                 displayName: "Win"),
     ]
 
     /// Helper for quick lookups—if an unknown character is passed in, we return a fallback.

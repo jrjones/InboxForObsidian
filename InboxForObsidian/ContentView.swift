@@ -1,14 +1,7 @@
 import SwiftUI
 import SwiftData
 import Foundation
-
-#if canImport(UIKit)
-import UIKit
-#endif
-#if canImport(AppKit)
-import AppKit
-#endif
-
+import MarkdownUI
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -16,56 +9,110 @@ struct ContentView: View {
     @FocusState private var isTextEditorFocused: Bool
 
     @StateObject private var viewModel: InboxViewModel
+    @State private var isPreview: Bool = false
 
-    // Inject ModelContext from the app for SwiftData operations.
+    /// Inject the ModelContext from the app for SwiftData operations.
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
     }
 
     var body: some View {
         VStack {
-            // Main text editor for drafting notes with smart paste handling.
-            // Main text editor for drafting notes with smart paste handling.
+            // Editor / Preview toggle
             Group {
-                #if canImport(UIKit)
-                PasteHandlingTextEditor(text: $viewModel.draftText)
-                #else
-                PasteHandlingTextEditor(text: $viewModel.draftText,
-                                         isFocused: $isTextEditorFocused)
-                #endif
+                if isPreview {
+                    ScrollView {
+                        Markdown(viewModel.draftText)
+                            .markdownTheme(.gitHub)
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
+                } else {
+#if canImport(UIKit)
+                    PasteHandlingTextEditor(text: $viewModel.draftText)
+#else
+                    PasteHandlingTextEditor(text: $viewModel.draftText,
+                                             isFocused: $isTextEditorFocused)
+#endif
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding()
+
+            // Shortcut bar inset
             .safeAreaInset(edge: .bottom) {
-                // Bottom toolbar with New Note button and Markdown shortcuts.
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            viewModel.startNewDraft()
-                            isTextEditorFocused = true  // focus editor for new draft
-                        }) {
-                            Image(systemName: "plus.circle")
-                        }
-                        Spacer()
-                        // Markdown shortcut bar triggers push to Obsidian when its action is invoked.
-                        MarkdownShortcutBar(draftText: $viewModel.draftText) {
-                            Task {
-                                await viewModel.pushNotesToObsidian(openURL: openURL)
-                            }
-                        }
+                HStack {
+                    Spacer()
+                    MarkdownShortcutBar(draftText: $viewModel.draftText, showsSyncButton: false) {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
                     }
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                    .background(.thinMaterial)
+                    Spacer()
                 }
-                .padding()
+                .padding(.vertical, 16)
+                .background(.thinMaterial)
+            }
+        }
+#if os(visionOS)
+        // Vision‑only ornament toolbar
+        .ornament(
+            attachmentAnchor: .scene(.leading),
+            contentAlignment: .leading
+        ) {
+            VStack(alignment: .leading, spacing: 12) {
+                Button {
+                    viewModel.startNewDraft()
+                    isTextEditorFocused = true
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+                Button {
+                    isPreview.toggle()
+                } label: {
+                    Image(systemName: isPreview ? "pencil" : "eye")
+                }
+                Button {
+                    Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                } label: {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                }
+            }
+            .padding()
+            .background(.thinMaterial)
+            .cornerRadius(20)
+            .offset(x: -30)
+        }
+#endif
+        // Standard toolbar for non‑visionOS
+        .toolbar {
+#if !os(visionOS)
+            ToolbarItem {
+                HStack {
+                    Button {
+                        viewModel.startNewDraft()
+                        isTextEditorFocused = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                    }
+                    Button {
+                        isPreview.toggle()
+                    } label: {
+                        Image(systemName: isPreview ? "pencil" : "eye")
+                    }
+                    Button {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                    } label: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                    }
+                }
+            }
+#endif
         }
         .onAppear {
-            // Focus the text editor when the view appears to allow immediate typing.
+            // Autofocus the editor on launch
             isTextEditorFocused = true
         }
         .onChange(of: scenePhase) { newPhase in
-            // Delegate scene phase changes (background/foreground) to the view model.
             viewModel.handleScenePhaseChange(newPhase)
         }
     }

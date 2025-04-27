@@ -1,8 +1,10 @@
-# Inbox for Obsidian -- MVP Specification
+# Inbox for Obsidian
 ![gfx/ifo-icon.png|128](gfx/ifo-icon.png)
-## Overview
 
-A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdown capture, tightly integrated with Obsidian.md. Opens instantly to a text editor for quick note-taking or task capture, using local SwiftData storage (synced with iCloud) and a manual push to Obsidian to prevent sync conflicts.
+## Overview
+A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdown capture, tightly integrated with https://Obsidian.md 
+
+Opens *instantly* to a text editor for quick note-taking or task capture, using local SwiftData storage (synced with iCloud) and a manual push to Obsidian to prevent sync conflicts.
 
 # Core Features
 
@@ -29,13 +31,42 @@ A minimalist app for iOS (and iPadOS, MacOS, and VisionOS) for ultra-fast Markdo
  - [x] Background/foreground behavior (save and start new if foreground after > 30s, if < 30s stay on same item)
  - [x] Rotation and keyboard show/hide handling
  - [x] Native Vision OS support (with "ornaments" bar)
- - [ ] Advanced paste behavior (handle URLs, short text, long text)
+ - [x] Advanced paste behavior (handle URLs, short text, long text)
+ - [x] SFSymbol icons (rendered and cached) for markdown shortcut bar
+ - [/] Markdown preview with SFSymbol replacement
  - [ ] Better iOS and macOS citizen (UI/UX: SwiftUI improvements, theming, and advanced features.)
- - [ ] AI features - low hanging fruit is selecting an appropriate icon when I don't have one. But there's a lot of ideas to explore. (This project is to some degree a platform for that exploration, but need some useful functionality first.)
+  - [ ] voice ingest (WhisperKit)
+  
+
+## Markdown Preview with MarkdownUI
+
+To enable full block-level GitHub-flavored Markdown (headings, lists, tables, code blocks, task lists, etc.) in the preview:
+
+1. In Xcode, add the MarkdownUI Swift package:
+   - File > Add Packages...
+   - Enter the repository URL: https://github.com/gonzalezreal/MarkdownUI
+   - Specify a version compatible with iOS 15+ and macOS 12+.
+2. In `ContentView.swift`, import MarkdownUI and wrap the preview in `#if canImport(MarkdownUI)`:
+```swift
+#if canImport(MarkdownUI)
+import MarkdownUI
+
+// Your preview logic here (e.g. wrapping in ScrollView)
+if isPreview {
+    ScrollView {
+        Markdown(viewModel.draftText)
+            .markdownTheme(.gitHub)
+            .textSelection(.enabled)
+    }
+} else {
+    // ... text editor
+}
+#endif
+```
 
 ## Further out (maybe not this weekend)
 
-- voice ingest (WhisperKit? OpenAI's new agentic audio AIs?')
 - Archive instead of delete, archive management
 - handling data types other than text and voice (photo, video, etc.)
 - multiple vault andline
+- AI features - low hanging fruit is selecting an appropriate icon when I don't have one. But there's a lot of ideas to explore. (This project is to some degree a platform for that exploration, but need some useful functionality first.)

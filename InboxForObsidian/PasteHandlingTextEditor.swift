@@ -31,6 +31,9 @@ struct PasteHandlingTextEditor: UIViewRepresentable {
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.autocorrectionType = .yes
         textView.autocapitalizationType = .sentences
+        // Remove default text container insets for full-bleed content
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
         return textView
     }
 
