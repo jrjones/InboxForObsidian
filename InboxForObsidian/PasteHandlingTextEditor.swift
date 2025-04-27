@@ -35,7 +35,8 @@ struct PasteHandlingTextEditor: UIViewRepresentable {
         textView.autocorrectionType = .yes
         textView.autocapitalizationType = .sentences
         // Remove default text container insets for full-bleed content
-        textView.textContainerInset = .zero
+        // Add top padding inside the editor
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
         textView.textContainer.lineFragmentPadding = 0
         return textView
     }
@@ -63,7 +64,11 @@ struct PasteHandlingTextEditor: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
-            text = textView.text
+            let latest = textView.text ?? ""
+            // Defer the SwiftUI state update to the next run‑loop tick.
+            DispatchQueue.main.async {
+                self.text = latest
+            }
         }
 
 
@@ -102,7 +107,9 @@ struct PasteHandlingTextEditor: UIViewRepresentable {
             let sel = textView.selectedRange
             let updated = current.replacingCharacters(in: sel, with: insertString)
             textView.text = updated
-            text = updated
+            DispatchQueue.main.async {
+                self.text = updated
+            }
             let newPos = sel.location + cursorOffset
             if let start = textView.position(from: textView.beginningOfDocument, offset: newPos) {
                 textView.selectedTextRange = textView.textRange(from: start, to: start)
@@ -162,6 +169,8 @@ struct PasteHandlingTextEditor: NSViewRepresentable {
         tv.isEditable = true
         tv.isSelectable = true
         tv.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
+        // Add top padding inside the editor
+        tv.textContainerInset = NSSize(width: 0, height: 12)
         // Configure resizing so the text view fills the scrollView
         tv.minSize = NSSize(width: 0, height: contentSize.height)
         tv.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)

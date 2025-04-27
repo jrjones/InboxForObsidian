@@ -14,8 +14,8 @@ struct ContentView: View {
     @StateObject private var viewModel: InboxViewModel
     @State private var isPreview = false
 
-    private enum ActionTab: Hashable { case main, newEntry, togglePreview, sync }
-    @State private var selectedTab: ActionTab = .main
+    private enum ActionTab: Hashable { case newEntry, togglePreview, sync }
+    @State private var selectedTab: ActionTab = .newEntry
 
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
@@ -35,13 +35,14 @@ struct ContentView: View {
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
                 } else {
-                    PasteHandlingTextEditor(text: $viewModel.draftText,
-                                             isFocused: $isTextEditorFocused)
+                    TextEditor(text: $viewModel.draftText)
+                        .focused($isTextEditorFocused)
                 }
             }
             .padding(.horizontal, 48)
             .padding(.vertical, 24)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear { print("🔥 TextEditor appeared") }
         }
     }
 
@@ -63,21 +64,21 @@ struct ContentView: View {
                 .tabItem { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
                 .tag(ActionTab.sync)
         }
-        .onChange(of: selectedTab) { tab in
-            switch tab {
+        .task(id: selectedTab) {
+            switch selectedTab {
             case .newEntry:
                 viewModel.startNewDraft()
-                isTextEditorFocused = true
+                try? await Task.sleep(nanoseconds: 300_000_000) // let layout settle
+                await MainActor.run { isTextEditorFocused = true }
+
             case .togglePreview:
-                isPreview.toggle()
+                await MainActor.run { isPreview.toggle() }
+
             case .sync:
-                Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
-            default: break
+                await viewModel.pushNotesToObsidian(openURL: openURL)
             }
-            selectedTab = .main        // collapse labels after the action
         }
-        .onAppear { isTextEditorFocused = true }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { oldPhase, newPhase in
             viewModel.handleScenePhaseChange(newPhase)
         }
         // Shortcut bar ornament
@@ -112,6 +113,7 @@ struct ContentView: View {
                 if isPreview {
                     ScrollView {
                         TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.top, 12)
                             .padding(.horizontal, 10)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -190,6 +192,7 @@ struct ContentView: View {
                 if isPreview {
                     ScrollView {
                         TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.top, 12)
                             .padding(.horizontal, 10)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
