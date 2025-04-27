@@ -3,6 +3,7 @@ import SwiftData
 import Foundation
 import MarkdownUI
 
+#if false    // legacy mixed‑platform implementation (disabled)
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
@@ -20,6 +21,7 @@ struct ContentView: View {
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
     }
+
 
     // Shared editor / preview stack
     @ViewBuilder
@@ -52,7 +54,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-#if os(visionOS)
+    #if os(visionOS)
         TabView(selection: $selectedTab) {
             // New Entry tab
             editorArea
@@ -87,46 +89,88 @@ struct ContentView: View {
         .onAppear {
             isTextEditorFocused = true
         }
-        .onChange(of: scenePhase) { _, newPhase in
+        .onChange(of: scenePhase) { newPhase in
             viewModel.handleScenePhaseChange(newPhase)
         }
-#else
-        // ----- non‑visionOS path stays exactly as it was -----
-        editorArea
-        .toolbar {
-            ToolbarItem {
-                HStack {
-                    Button {
-                        viewModel.startNewDraft()
-                        isTextEditorFocused = true
-                    } label: {
-                        Image(systemName: "plus.circle")
-                    }
-                    .help("New Entry")
-                    Button {
-                        isPreview.toggle()
-                    } label: {
-                        Image(systemName: isPreview ? "pencil" : "eye")
-                    }
-                    .help(isPreview ? Text("Edit") : Text("Preview"))
-                    Button {
-                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
-                    } label: {
-                        Image(systemName: "arrow.triangle.2.circlepath")
-                    }
-                    .help("Sync")
-                }
-            }
-        }
-        .onAppear {
-            isTextEditorFocused = true
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            viewModel.handleScenePhaseChange(newPhase)
-        }
-#endif
+     #elseif os(macOS)
+          // macOS toolbar — use identifiable content to avoid overload conflict
+          editorArea
+              .toolbar(visibility: .automatic) {
+                  ToolbarItemGroup(placement: .automatic) {
+                      // New Entry
+                      Button {
+                          viewModel.startNewDraft()
+                          isTextEditorFocused = true
+                      } label: {
+                          Image(systemName: "plus.circle")
+                      }
+                      .help("New Entry")
+
+                      // Toggle Preview / Edit
+                      Button {
+                          isPreview.toggle()
+                      } label: {
+                          Image(systemName: isPreview ? "pencil" : "eye")
+                      }
+                      .help(isPreview ? "Edit" : "Preview")
+
+                      // Sync
+                      Button {
+                          Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                      } label: {
+                          Image(systemName: "arrow.triangle.2.circlepath")
+                      }
+                      .help("Sync")
+                  }
+              }
+              .toolbarRole(.automatic)
+              .onAppear { isTextEditorFocused = true }
+              .onChange(of: scenePhase) { newPhase in
+                  viewModel.handleScenePhaseChange(newPhase)
+              }
+
+      #else   // iOS (and iPadOS, tvOS)
+          editorArea
+              .toolbar {
+                  // New Entry
+                  ToolbarItem(placement: .automatic) {
+                      Button {
+                          viewModel.startNewDraft()
+                          isTextEditorFocused = true
+                      } label: {
+                          Image(systemName: "plus.circle")
+                      }
+                      .help("New Entry")
+                  }
+
+                  // Toggle Preview / Edit
+                  ToolbarItem(placement: .automatic) {
+                      Button {
+                          isPreview.toggle()
+                      } label: {
+                          Image(systemName: isPreview ? "pencil" : "eye")
+                      }
+                      .help(isPreview ? "Edit" : "Preview")
+                  }
+
+                  // Sync
+                  ToolbarItem(placement: .automatic) {
+                      Button {
+                          Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                      } label: {
+                          Image(systemName: "arrow.triangle.2.circlepath")
+                      }
+                      .help("Sync")
+                  }
+              }
+              .toolbarRole(.automatic)
+              .onAppear { isTextEditorFocused = true }
+              .onChange(of: scenePhase) { newPhase in
+                  viewModel.handleScenePhaseChange(newPhase)
+              }
+    #endif
         // Shortcut bar inset (non-visionOS)
-#if !os(visionOS)
+    #if !os(visionOS)
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Spacer()
@@ -138,18 +182,270 @@ struct ContentView: View {
             .padding(.vertical, 16)
             .background(.thinMaterial)
         }
-#endif
+    #endif
         // Shortcut bar ornament (visionOS)
-#if os(visionOS)
+    #if os(visionOS)
         MarkdownShortcutBar(
             draftText: $viewModel.draftText,
             showsSyncButton: false
         ) {
             Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
         }
-#endif
+    #endif
     }
 }
+#endif       // end legacy implementation
+
+// MARK: - Platform‑specific ContentView implementations
+// VisionOS --------------------------------------------------------------
+#if os(visionOS)
+struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL)   private var openURL
+    @FocusState private var isTextEditorFocused: Bool
+
+    @StateObject private var viewModel: InboxViewModel
+    @State private var isPreview = false
+
+    private enum ActionTab: Hashable { case main, newEntry, togglePreview, sync }
+    @State private var selectedTab: ActionTab = .main
+
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
+    }
+
+    // Shared editor / preview stack
+    @ViewBuilder
+    private var editorArea: some View {
+        VStack {
+            Group {
+                if isPreview {
+                    ScrollView {
+                        TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.horizontal, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
+                } else {
+#if canImport(UIKit)
+                    PasteHandlingTextEditor(text: $viewModel.draftText)
+#else
+                    PasteHandlingTextEditor(text: $viewModel.draftText,
+                                             isFocused: $isTextEditorFocused)
+#endif
+                }
+            }
+            .padding(.horizontal, 48)
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            // New Entry tab
+            editorArea
+                .tabItem { Label("New", systemImage: "plus.circle") }
+                .tag(ActionTab.newEntry)
+
+            // Toggle Preview / Edit tab
+            editorArea
+                .tabItem { Label(isPreview ? "Edit" : "Preview",
+                                 systemImage: isPreview ? "pencil" : "eye") }
+                .tag(ActionTab.togglePreview)
+
+            // Sync tab
+            editorArea
+                .tabItem { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
+                .tag(ActionTab.sync)
+        }
+        .onChange(of: selectedTab) { tab in
+            switch tab {
+            case .newEntry:
+                viewModel.startNewDraft()
+                isTextEditorFocused = true
+            case .togglePreview:
+                isPreview.toggle()
+            case .sync:
+                Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+            default: break
+            }
+            selectedTab = .main        // collapse labels after the action
+        }
+        .onAppear { isTextEditorFocused = true }
+        .onChange(of: scenePhase) { newPhase in
+            viewModel.handleScenePhaseChange(newPhase)
+        }
+        // Shortcut bar ornament
+        MarkdownShortcutBar(
+            draftText: $viewModel.draftText,
+            showsSyncButton: false
+        ) {
+            Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+        }
+    }
+}
+#endif // visionOS
+
+// macOS --------------------------------------------------------------
+#if os(macOS)
+struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL)   private var openURL
+    @FocusState private var isTextEditorFocused: Bool
+
+    @StateObject private var viewModel: InboxViewModel
+    @State private var isPreview = false
+
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
+    }
+
+    @ViewBuilder
+    private var editorArea: some View {
+        VStack {
+            Group {
+                if isPreview {
+                    ScrollView {
+                        TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.horizontal, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
+                } else {
+                    PasteHandlingTextEditor(text: $viewModel.draftText,
+                                             isFocused: $isTextEditorFocused)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    var body: some View {
+        editorArea
+            .toolbar {
+                ToolbarItemGroup(placement: .automatic) {
+                    Button {
+                        viewModel.startNewDraft()
+                        isTextEditorFocused = true
+                    } label: { Image(systemName: "plus.circle") }
+                    .help("New Entry")
+
+                    Button {
+                        isPreview.toggle()
+                    } label: { Image(systemName: isPreview ? "pencil" : "eye") }
+                    .help(isPreview ? "Edit" : "Preview")
+
+                    Button {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                    } label: { Image(systemName: "arrow.triangle.2.circlepath") }
+                    .help("Sync")
+                }
+            }
+            .toolbarRole(.automatic)
+            .onAppear { isTextEditorFocused = true }
+            .onChange(of: scenePhase) { newPhase in
+                viewModel.handleScenePhaseChange(newPhase)
+            }
+            // Markdown shortcut bar (bottom inset, macOS)
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    Spacer()
+                    MarkdownShortcutBar(draftText: $viewModel.draftText,
+                                        showsSyncButton: false) {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 16)
+                .background(.thinMaterial)
+            }
+    }
+}
+#endif // macOS
+
+// iOS / iPadOS --------------------------------------------------------
+#if os(iOS)
+struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL)   private var openURL
+    @FocusState private var isTextEditorFocused: Bool
+
+    @StateObject private var viewModel: InboxViewModel
+    @State private var isPreview = false
+
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: InboxViewModel(context: modelContext))
+    }
+
+    @ViewBuilder
+    private var editorArea: some View {
+        VStack {
+            Group {
+                if isPreview {
+                    ScrollView {
+                        TaskMarkdownPreview(markdown: viewModel.draftText)
+                            .padding(.horizontal, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
+                } else {
+                    PasteHandlingTextEditor(text: $viewModel.draftText)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    var body: some View {
+        editorArea
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        viewModel.startNewDraft()
+                        isTextEditorFocused = true
+                    } label: { Image(systemName: "plus.circle") }
+                    .help("New Entry")
+                }
+
+                ToolbarItem(placement: .automatic) {
+                    Button { isPreview.toggle() } label: {
+                        Image(systemName: isPreview ? "pencil" : "eye")
+                    }
+                    .help(isPreview ? "Edit" : "Preview")
+                }
+
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                    } label: { Image(systemName: "arrow.triangle.2.circlepath") }
+                    .help("Sync")
+                }
+            }
+            .toolbarRole(.automatic)
+            .onAppear { isTextEditorFocused = true }
+            .onChange(of: scenePhase) { newPhase in
+                viewModel.handleScenePhaseChange(newPhase)
+            }
+            // Shortcut bar inset
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    Spacer()
+                    MarkdownShortcutBar(draftText: $viewModel.draftText,
+                                        showsSyncButton: false) {
+                        Task { await viewModel.pushNotesToObsidian(openURL: openURL) }
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 16)
+                .background(.thinMaterial)
+            }
+    }
+}
+#endif // iOS
 
 // MARK: - VisionOS expanding‑label button style
 /// A button style that shows only the SF Symbol by default and
