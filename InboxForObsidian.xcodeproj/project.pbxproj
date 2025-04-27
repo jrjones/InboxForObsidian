@@ -68,6 +68,11 @@
 			path = InboxForObsidianTests;
 			sourceTree = "<group>";
 		};
+		0FB3D8DF2DBE851800CE3388 /* .ai */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = .ai;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +97,7 @@
 		0F1AFF0C2DA106DE00BE47A4 = {
 			isa = PBXGroup;
 			children = (
+				0FB3D8DF2DBE851800CE3388 /* .ai */,
 				0F0759A42DA2CA1C0040B9FD /* gfx */,
 				0F0759A22DA2C9FF0040B9FD /* README.md */,
 				0F47B1862DA19E0200E82817 /* TestPlan.xctestplan */,
@@ -128,6 +134,7 @@
 			fileSystemSynchronizedGroups = (
 				0F0759A42DA2CA1C0040B9FD /* gfx */,
 				0F1AFF172DA106DE00BE47A4 /* InboxForObsidian */,
+				0FB3D8DF2DBE851800CE3388 /* .ai */,
 			);
 			name = InboxForObsidian;
 			packageProductDependencies = (

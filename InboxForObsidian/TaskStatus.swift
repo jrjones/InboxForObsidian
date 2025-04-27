@@ -27,13 +27,17 @@ struct TaskStatus: Identifiable {
     
     /// A static list of known statuses with chosen characters & (optionally) SF Symbols.
     static let known: [TaskStatus] = [
-        TaskStatus(rawValue: "!",  symbol: "exclamationmark.triangle",    displayName: "Alert"),
-        TaskStatus(rawValue: "?",  symbol: "questionmark.circle",         displayName: "Question"),
+        TaskStatus(rawValue: " ",  symbol: "circle",                      displayName: "Task"),
         TaskStatus(rawValue: "/",  symbol: "circle.lefthalf.filled",      displayName: "Partially Done"),
+        TaskStatus(rawValue: "x",  symbol: "checkmark.circle.fill",       displayName: "Done"),
+        TaskStatus(rawValue: "i",  symbol: "info.circle",                 displayName: "Information"),
+        TaskStatus(rawValue: "!",  symbol: "exclamationmark.triangle",    displayName: "Alert"),
+        TaskStatus(rawValue: "I",  symbol: "lightbulb.fill",              displayName: "Idea"),
+        TaskStatus(rawValue: "?",  symbol: "questionmark.circle",         displayName: "Question"),
+        TaskStatus(rawValue: "b",  symbol: "bookmark.fill",               displayName: "Bookmark"),
         TaskStatus(rawValue: ">",  symbol: "arrow.right",                 displayName: "Moved"),
         TaskStatus(rawValue: "<",  symbol: "arrow.left",                  displayName: "Event"),
         TaskStatus(rawValue: "*",  symbol: "star.fill",                   displayName: "Important"),
-        TaskStatus(rawValue: "i",  symbol: "info.circle",                 displayName: "Information"),
         TaskStatus(rawValue: "\"", symbol: "text.quote",                  displayName: "Quotation"),
         TaskStatus(rawValue: "p",  symbol: "hand.thumbsup.fill",          displayName: "Thumbs Up"),
         TaskStatus(rawValue: "c",  symbol: "hand.thumbsdown.fill",        displayName: "Thumbs Down"),
@@ -41,9 +45,7 @@ struct TaskStatus: Identifiable {
         TaskStatus(rawValue: "d",  symbol: "arrow.down",                  displayName: "Down trend"),
         TaskStatus(rawValue: "f",  symbol: "flame.fill",                  displayName: "Fire"),
         TaskStatus(rawValue: "k",  symbol: "key.fill",                    displayName: "Key"),
-        TaskStatus(rawValue: "b",  symbol: "bookmark.fill",               displayName: "Bookmark"),
         TaskStatus(rawValue: "l",  symbol: "mappin.and.ellipse",          displayName: "Location"),
-        TaskStatus(rawValue: "I",  symbol: "lightbulb.fill",              displayName: "Idea"),
         TaskStatus(rawValue: "S",  symbol: "dollarsign.circle.fill",      displayName: "Savings/Spend"),
         TaskStatus(rawValue: "w",  symbol: "trophy.fill",                 displayName: "Win"),
     ]

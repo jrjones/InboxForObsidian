@@ -26,7 +26,7 @@ struct MarkdownShortcutBar: View {
                 VStack(spacing: 8) {
                     HStack(spacing: 16) {
                         syncButton
-                        emptyTaskButton
+                        //emptyTaskButton
                         ForEach(topRow) { status in
                             statusButton(status)
                         }
@@ -41,7 +41,7 @@ struct MarkdownShortcutBar: View {
                 // REGULAR: single-row layout
                 HStack(spacing: 16) {
                     syncButton
-                    emptyTaskButton
+                    //emptyTaskButton
                     ForEach(statuses) { status in
                         statusButton(status)
                     }
@@ -64,14 +64,14 @@ struct MarkdownShortcutBar: View {
         }
     }
 
-    private var emptyTaskButton: some View {
-        Button {
-            draftText += " - [ ] "
-        } label: {
-            Image(systemName: "square")
-        }
-        .help("Empty task")
-    }
+//    private var emptyTaskButton: some View {
+//        Button {
+//            draftText += " - [ ] "
+//        } label: {
+//            Image(systemName: "square")
+//        }
+//        .help("Empty task")
+//    }
 
     private func statusButton(_ status: TaskStatus) -> some View {
         Button {

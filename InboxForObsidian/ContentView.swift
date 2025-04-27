@@ -20,14 +20,16 @@ struct ContentView: View {
         VStack {
             // Editor / Preview toggle
             Group {
-                if isPreview {
-                    ScrollView {
-                        TaskMarkdownPreview(markdown: viewModel.draftText)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .scrollContentBackground(.hidden)
-                    .background(Color.clear)
-                } else {
+            if isPreview {
+                // Render Markdown with task previews using TaskMarkdownPreview
+                ScrollView {
+                    TaskMarkdownPreview(markdown: viewModel.draftText)
+                        .padding(.horizontal, 10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
+            } else {
 #if canImport(UIKit)
                     PasteHandlingTextEditor(text: $viewModel.draftText)
 #else
@@ -110,8 +112,59 @@ struct ContentView: View {
             // Autofocus the editor on launch
             isTextEditorFocused = true
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { oldPhase, newPhase in
             viewModel.handleScenePhaseChange(newPhase)
         }
     }
+}
+
+// MARK: - MarkdownUI Minimal Obsidian Theme
+extension Theme {
+    /// A minimal Obsidian-inspired MarkdownUI theme with transparent background,
+    /// dynamic primary text color, and minimal padding.
+    static let obsidianMinimal: Theme = Theme()
+        // Headings: semibold and descending sizes
+        .heading1 { config in
+            config.label
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+        }
+        .heading2 { config in
+            config.label
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+        }
+        .heading3 { config in
+            config.label
+                .font(.title3)
+                .foregroundColor(.primary)
+        }
+        .heading4 { config in
+            config.label
+                .font(.headline)
+                .foregroundColor(.primary)
+        }
+        .heading5 { config in
+            config.label
+                .font(.subheadline)
+                .foregroundColor(.primary)
+        }
+        .heading6 { config in
+            config.label
+                .font(.footnote)
+                .foregroundColor(.primary)
+        }
+        // Paragraphs and list items use body font
+        .paragraph { config in
+            config.label
+                .font(.body)
+                .foregroundColor(.primary)
+        }
+        .listItem { config in
+            config.label
+                .font(.body)
+                .foregroundColor(.primary)
+        }
 }
