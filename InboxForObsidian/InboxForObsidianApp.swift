@@ -7,16 +7,11 @@ struct InboxForObsidianApp: App {
     @State private var container: ModelContainer
     init() {
         do {
-            // Identify your schema (the data models you want)
             let schema = Schema([InboxItem.self])
-            
-            // Specify a CloudKit container
-            let config = ModelConfiguration(isStoredInMemoryOnly: true)
-
-            // Create a ModelContainer using that config
-            container = try ModelContainer(for: schema, configurations: [config])
+            // Use SwiftData’s default persistent configuration.
+            container = try ModelContainer(for: schema)
         } catch {
-            fatalError("Failed to create ModelContainer: \\(error)")
+            fatalError("Failed to create ModelContainer: \(error)")
         }
     }
 
