@@ -68,10 +68,10 @@ struct ContentView: View {
                 .tabItem { Label("Sync", systemImage: "arrow.triangle.2.circlepath") }
                 .tag(ActionTab.sync)
         }
-        .onChange(of: selectedTab) { newTab in
+        .onChange(of: selectedTab) {
             // defer work to next run‑loop tick to avoid view‑update mutations
             DispatchQueue.main.async {
-                switch newTab {
+                switch selectedTab {
                 case .newEntry:
                     viewModel.startNewDraft()
                     isTextEditorFocused = true
