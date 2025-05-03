@@ -27,7 +27,8 @@ import Foundation
         self.id = id
         self.content = content
         self.createdAt = createdAt
-        self.targetDate = targetDate
+        // Ensure targetDate is normalized to start of day
+        self.targetDate = Calendar.current.startOfDay(for: targetDate)
         self.synced = synced
     }
 }
