@@ -9,7 +9,7 @@ xcuserdata/
 # Swift Package Manager
 .swiftpm/
 .build/
-!InboxForObsidian.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+!Package.resolved
 
 # CocoaPods
 Pods/
