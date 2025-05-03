@@ -228,7 +228,8 @@ struct PasteHandlingTextEditor: NSViewRepresentable {
                 cursorOffset = pasted.count
             } else {
                 let ns = textView.string as NSString
-                let selRange = textView.selectedRanges.first as? NSValue
+                // selectedRanges.first is already NSValue?
+                let selRange = textView.selectedRanges.first
                 let sel = selRange?.rangeValue ?? NSRange(location: 0, length: 0)
                 let cursorLoc = sel.location
                 let lineStart: Int
@@ -245,7 +246,8 @@ struct PasteHandlingTextEditor: NSViewRepresentable {
                 cursorOffset = insertString.count
             }
             let full = textView.string as NSString
-            let selValue = textView.selectedRanges.first as? NSValue
+            // selectedRanges.first is already NSValue?
+            let selValue = textView.selectedRanges.first
             let sel = selValue?.rangeValue ?? NSRange(location: 0, length: 0)
             let updated = full.replacingCharacters(in: sel, with: insertString)
             textView.string = updated
