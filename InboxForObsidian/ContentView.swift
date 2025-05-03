@@ -162,7 +162,8 @@ struct ContentView: View {
             }
             .toolbarRole(.automatic)
             .onAppear { isTextEditorFocused = true }
-            .onChange(of: scenePhase) { newPhase in
+            // Use two-parameter onChange to satisfy macOS 14+ deprecation
+            .onChange(of: scenePhase) { _, newPhase in
                 viewModel.handleScenePhaseChange(newPhase)
             }
             // Markdown shortcut bar (bottom inset, macOS)
@@ -244,7 +245,8 @@ struct ContentView: View {
             }
             .toolbarRole(.automatic)
             .onAppear { isTextEditorFocused = true }
-            .onChange(of: scenePhase) { newPhase in
+            // Use two-parameter onChange to satisfy iOS 18+ deprecation
+            .onChange(of: scenePhase) { _, newPhase in
                 viewModel.handleScenePhaseChange(newPhase)
             }
             // Shortcut bar inset
