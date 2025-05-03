@@ -115,14 +115,16 @@ struct InboxItemTests {
         }
 
         @Test func forRawValueReturnsExpectedTaskStatusForKnownKeys() {
+            // Verify known status "!" yields correct symbol & display name
             let alertStatus = TaskStatus.forRawValue("!")
             #expect(alertStatus.id == "!")
             #expect(alertStatus.symbol == "exclamationmark.triangle")
             #expect(alertStatus.displayName == "Alert")
 
+            // Verify known status "*" (Important) uses its SF Symbol
             let importantStatus = TaskStatus.forRawValue("*")
             #expect(importantStatus.id == "*")
-            #expect(importantStatus.symbol == nil)
+            #expect(importantStatus.symbol == "star.fill")
             #expect(importantStatus.displayName == "Important")
         }
 
