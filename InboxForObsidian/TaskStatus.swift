@@ -37,8 +37,8 @@ struct TaskStatus: Identifiable {
         TaskStatus(rawValue: "b",  symbol: "bookmark.fill",               displayName: "Bookmark"),
         TaskStatus(rawValue: ">",  symbol: "paperplane.fill",                 displayName: "Moved"),
         TaskStatus(rawValue: "<",  symbol: "calendar",                  displayName: "Event"),
-        // Important tasks: no explicit symbol, will fall back to default
-        TaskStatus(rawValue: "*",  symbol: nil,                          displayName: "Important"),
+        // Important tasks: uses star.fill symbol
+        TaskStatus(rawValue: "*",  symbol: "star.fill",                   displayName: "Important"),
         TaskStatus(rawValue: "\"", symbol: "quote.bubble.fill",            displayName: "Quotation"),
         TaskStatus(rawValue: "p",  symbol: "hand.thumbsup.fill",          displayName: "Thumbs Up"),
         TaskStatus(rawValue: "c",  symbol: "hand.thumbsdown.fill",        displayName: "Thumbs Down"),
