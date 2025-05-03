@@ -36,6 +36,9 @@
          <TestPlanReference
             reference = "container:InboxForObsidianTests/TestPlan.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:CI-TestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
    </TestAction>
    <LaunchAction
