@@ -1,11 +1,12 @@
 # Xcode
 build/
 DerivedData/
-*.xcworkspace
+#*.xcworkspace
 xcuserdata/
-*.xcodeproj/project.xcworkspace/
+#*.xcodeproj/project.xcworkspace/
 *.xcodeproj/xcuserdata/
-
+*.xcworkspace/        # still ignore workspace junk …
+!*.xcworkspace/xcshareddata/**   # …but keep shared data (schemes, Package.resolved)
 # Swift Package Manager
 .swiftpm/
 .build/
