@@ -17,7 +17,9 @@ struct ItemTests {
     // Called before each test to create a fresh container
     init() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(for: Item.self, configurations: config)
+        // Use explicit Schema initializer to ensure in-memory model container can load metadata in tests
+        let schema = Schema([Item.self])
+        container = try ModelContainer(for: schema, configurations: config)
     }
 
     @Test("Verify Item initializes with correct timestamp")
@@ -48,7 +50,9 @@ struct InboxItemTests {
     // Called before each test to create a fresh container
     init() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(for: InboxItem.self, configurations: config)
+        // Use explicit Schema initializer to ensure in-memory model container can load metadata in tests
+        let schema = Schema([InboxItem.self])
+        container = try ModelContainer(for: schema, configurations: config)
     }
 
     @Test("InboxItem default values check")
