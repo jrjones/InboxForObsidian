@@ -30,11 +30,11 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:InboxForObsidian.xctestplan"
-            default = "YES">
+            reference = "container:InboxForObsidian.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:InboxForObsidianTests/TestPlan.xctestplan">
+            reference = "container:InboxForObsidianTests/TestPlan.xctestplan"
+            default = "YES">
          </TestPlanReference>
          <TestPlanReference
             reference = "container:CI-TestPlan.xctestplan">
