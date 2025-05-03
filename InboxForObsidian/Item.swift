@@ -10,7 +10,9 @@ import SwiftData
 
 @Model
 final class Item {
-    var timestamp: Date
+    /// Timestamp when the item was created or captured.
+    /// Default value provided for SwiftData/CoreData compatibility.
+    var timestamp: Date = Date()
     
     init(timestamp: Date) {
         self.timestamp = timestamp
